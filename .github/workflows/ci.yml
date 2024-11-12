@@ -24,7 +24,7 @@ jobs:
         uses: astral-sh/ruff-action@v1
       - name: Test with pytest
         run: |
-          coverage run -m PYTHONPATH=. pytest  -v -s
+          coverage run -m pytest  -v -s
       - name: Generate Coverage Report
         run: |
           coverage report -m
