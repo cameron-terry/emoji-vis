@@ -22,6 +22,7 @@ jobs:
           sudo apt-get install -y libxml2-utils
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          mkdir retrieval/data
       - name: Test with pytest
         working-directory: ${{ env.PROJECT_VERSION }}
         run: |
