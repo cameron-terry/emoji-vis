@@ -1,9 +1,8 @@
 name: Run Unit Test via Pytest
-
 on: [push, pull_request]
 
 jobs:
-  build:
+  code-coverage:
     runs-on: ubuntu-latest
     env:
         PYTHON_VERSION: "3.10.4"
@@ -23,8 +22,6 @@ jobs:
           sudo apt-get install -y libxml2-utils
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Lint with Ruff
-        uses: astral-sh/ruff-action@v1
       - name: Test with pytest
         working-directory: ${{ env.PROJECT_VERSION }}
         run: |
@@ -34,3 +31,11 @@ jobs:
             echo "Coverage is below ${{ env.CODE_COVERAGE_PERCENT }}%: $BASIC_COVERAGE"
             exit 1
           fi
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint with Ruff
+        uses: astral-sh/ruff-action@v1
