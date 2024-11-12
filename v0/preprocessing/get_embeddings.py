@@ -27,6 +27,8 @@ class Embedder:
         # max pooling
         elif method == "max":
             return np.max(emb, axis=1)
+        else:
+            raise ValueError("Invalid method. Choose from 'cls', 'mean', 'max'")
 
     def cosine_similarity(self, emb1: np.ndarray, emb2: np.ndarray) -> float:
         assert emb1.shape == emb2.shape, "Embeddings must have the same shape"
