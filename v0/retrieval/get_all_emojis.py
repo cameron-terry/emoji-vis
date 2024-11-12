@@ -27,6 +27,9 @@ def emoji_map() -> Dict[str, str]:
 
 
 def emoji_filter_by_status(emoji_map: Dict[str, str], status: str):
+    if status not in emoji.STATUS:
+        raise ValueError(f"Status must be one of {list(emoji.STATUS.keys())}")
+
     """Filter emojis by status."""
     return {
         e: name

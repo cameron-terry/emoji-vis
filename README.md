@@ -6,3 +6,5 @@ in `v0`, run `source dev_setup.sh`. This installs a code linter [ruff](https://g
 
 ### testing
 `coverage run -m pytest  -v -s` for unit tests
+
+[excluding code coverage](https://coverage.readthedocs.io/en/latest/excluding.htmlhttps://coverage.readthedocs.io/en/latest/excluding.html)
