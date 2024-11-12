@@ -7,7 +7,7 @@ jobs:
     env:
         PYTHON_VERSION: "3.10.4"
         PROJECT_VERSION: "v0"
-        CODE_COVERAGE_PERCENT: 0.9
+        CODE_COVERAGE_PERCENT: 90
         HF_INFERENCE_TOKEN: ${{ secrets.HF_INFERENCE_TOKEN }}
 
     steps:
