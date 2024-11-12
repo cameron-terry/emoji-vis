@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-        PYTHON_VERSION: '3.10.0'
+        PYTHON_VERSION: "3.10.4"
         PROJECT_VERSION: v0
 
     steps:
