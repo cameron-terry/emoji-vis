@@ -177,3 +177,6 @@ cython_debug/
 
 # Built Visual Studio Code Extensions
 *.vsix
+
+# Linter
+.ruff_cache
