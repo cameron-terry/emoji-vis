@@ -17,7 +17,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install dependencies
         run: |
-          cd {{ env.PROJECT_VERSION }}
+          cd ${{ env.PROJECT_VERSION }}
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Lint with Ruff
