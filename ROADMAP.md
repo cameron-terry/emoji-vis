@@ -1,6 +1,7 @@
 # v0
 take all of the emojis currently usable by:
     - Apple/iOS
+    - English only
 
 create a system that:
     1. Retrieval
