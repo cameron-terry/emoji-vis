@@ -26,6 +26,8 @@ jobs:
       - name: Test with pytest
         working-directory: ${{ env.PROJECT_VERSION }}
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libxml2-utils
           coverage run -m pytest  -v -s && coverage xml
           BASIC_COVERAGE="$(xmllint --xpath 'string(/coverage/@line-rate)' coverage.xml | bc)"
           if [ $(echo "$BASIC_COVERAGE < ${{ env.CODE_COVERAGE_PERCENT }}" | bc) -eq 1 ]; then
