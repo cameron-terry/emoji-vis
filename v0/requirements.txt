@@ -2,3 +2,4 @@ emoji
 pytest
 ruff
 pre-commit
+coverage
