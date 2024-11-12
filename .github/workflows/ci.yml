@@ -16,15 +16,14 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install dependencies
+        working-directory: ${{ env.PROJECT_VERSION }}
         run: |
-          cd ${{ env.PROJECT_VERSION }}
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Lint with Ruff
         uses: astral-sh/ruff-action@v1
       - name: Test with pytest
+        working-directory: ${{ env.PROJECT_VERSION }}
         run: |
           coverage run -m pytest  -v -s
-      - name: Generate Coverage Report
-        run: |
           coverage report -m
