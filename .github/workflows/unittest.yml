@@ -1,4 +1,4 @@
-name: Run Unit Test via Pytest
+name: Pytest unittest coverage
 on: [push, pull_request]
 
 jobs:
@@ -31,11 +31,3 @@ jobs:
             echo "Coverage is below ${{ env.CODE_COVERAGE_PERCENT }}%: $BASIC_COVERAGE"
             exit 1
           fi
-
-  lint:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Lint with Ruff
-        uses: astral-sh/ruff-action@v1
