@@ -50,7 +50,7 @@ def all_emojis_with_data(
         emojis = emoji_map()
 
         if filters:
-            for filter in filters:
+            for filter in filters:  # pragma: no cover
                 emojis = emoji_filter_by_status(emojis, filter)
 
         json.dump(emojis, f)
@@ -59,7 +59,7 @@ def all_emojis_with_data(
     return emojis
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     import config as c
 
     emoji_map = all_emojis_with_data(c.RET_SAVE_DATA_FOLDER, "w")
