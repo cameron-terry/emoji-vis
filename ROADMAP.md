@@ -16,6 +16,6 @@ create a system that:
     - processes this datastore to generate embeddings and update emojis
 
     3. Visualization
-    - t-SNE or UMAP 
+    - t-SNE or UMAP
 # v0.1
     - Android

@@ -1,0 +1,30 @@
+name: Run Unit Test via Pytest
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+        PYTHON_VERSION: 3.9.7
+        PROJECT_VERSION: v0
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install dependencies
+        run: |
+          cd {{ env.PROJECT_VERSION }}
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Lint with Ruff
+        uses: astral-sh/ruff-action@v1
+      - name: Test with pytest
+        run: |
+          coverage run -m PYTHONPATH=. pytest  -v -s
+      - name: Generate Coverage Report
+        run: |
+          coverage report -m
