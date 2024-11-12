@@ -28,6 +28,8 @@ while read -r class_name line_rate; do
   fi
 done <<< "$class_info"
 
+coverage report -m
+
 # If any class is below threshold, output the class names and fail the build
 if [ "$result" = "true" ]; then
   echo "Code coverage is below threshold for the following classes:"

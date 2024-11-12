@@ -27,7 +27,7 @@ jobs:
       - name: Test with pytest
         working-directory: ${{ env.PROJECT_VERSION }}
         run: |
-          coverage run -m pytest  -v -s && coverage report -m && coverage xml
+          coverage run -m pytest  -v -s && coverage xml
       - name: Coverage verification
         working-directory: ${{ env.PROJECT_VERSION }}
         run: |
