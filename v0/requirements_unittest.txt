@@ -1,0 +1,5 @@
+emoji
+pytest
+coverage-badge
+huggingface-hub
+numpy
