@@ -34,11 +34,14 @@ jobs:
                 python build_emoji_map.py
             - name: Commit and push updated emoji_map.html
               run: |
-                git config --global user.name "github-actions[bot]"
-                git config --global user.email "github-actions[bot]@users.noreply.github.com"
+                git config user.name "github-actions[bot]"
+                git config user.email "github-actions[bot]@users.noreply.github.com"
+
+                # Add the HTML file to the Git staging area
                 git add emoji_map.html
-                git commit -m "Auto-update emoji map on pull request"
-                # Pull latest changes from the branch with rebase to avoid conflicts
-                git pull --rebase origin ${{ github.event.pull_request.base.ref }}
-                # Push the changes to the branch
-                git push origin HEAD:${{ github.event.pull_request.base.ref }}
+
+                # Commit the changes with a message
+                git commit -m "Update emoji_map.html"
+
+                # Push the changes to the branch associated with the pull request
+                git push origin HEAD:${{ github.event.pull_request.head.ref }}
