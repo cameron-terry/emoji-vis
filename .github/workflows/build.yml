@@ -27,7 +27,7 @@ jobs:
                 python -m pip install --upgrade pip
                 if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
                 mkdir retrieval/data
-                curl -L -o data/${{ env.MAP_DATA_NAME }} ${{ env.MAP_DATA_URL }}
+                curl -L -o retrieval/data/${{ env.MAP_DATA_NAME }} ${{ env.MAP_DATA_URL }}
             - name: Build Emoji Map
               working-directory: ${{ env.PROJECT_VERSION }}
               run: |
