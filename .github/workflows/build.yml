@@ -1,0 +1,38 @@
+name: Build Emoji Map
+
+on:
+  pull_request:
+    branches:
+      - main  # adjust the branch name as needed
+  workflow_dispatch: # also allows you to manually trigger the workflow
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        env:
+            PYTHON_VERSION: "3.10.4"
+            PROJECT_VERSION: "v0"
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up Python ${{ env.PYTHON_VERSION }}
+              uses: actions/setup-python@v5
+              with:
+                python-version: ${{ env.PYTHON_VERSION }}
+            - name: Install dependencies
+              working-directory: ${{ env.PROJECT_VERSION }}
+              run: |
+                python -m pip install --upgrade pip
+                if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+            - name: Build Emoji Map
+              working-directory: ${{ env.PROJECT_VERSION }}
+              run: |
+                python build_emoji_map.py
+            - name: Commit and push updated emoji_map.html
+              run: |
+                git config --global user.name "github-actions[bot]"
+                git config --global user.email "github-actions[bot]@users.noreply.github.com"
+                git add emoji_map.html
+                git commit -m "Auto-update emoji map on pull request"
+                git push
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

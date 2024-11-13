@@ -26,3 +26,4 @@ def plot_embeddings(embeddings_2d, emojis, dimensions=(1600, 1200)):
 
     # Show the plot
     fig.show()
+    fig.write_html("../emoji_map.html", include_plotlyjs="cdn")
