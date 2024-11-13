@@ -13,7 +13,7 @@ jobs:
             PYTHON_VERSION: "3.10.4"
             PROJECT_VERSION: "v0"
             MAP_DATA_NAME: "emojis_unform.json"
-            MAP_DATA_URL: "https://drive.google.com/uc?export=download&id=18410XLDOgXxY5PHxn8IEIDytDgu81MB7"
+            MAP_DATA_URL: "https://drive.google.com/uc?id=18410XLDOgXxY5PHxn8IEIDytDgu81MB7"
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         steps:
             - uses: actions/checkout@v4
@@ -26,8 +26,8 @@ jobs:
               run: |
                 python -m pip install --upgrade pip
                 if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-                mkdir retrieval/data
-                gdown --id ${{ env.MAP_DATA_URL }} -O retrieval/data/${{ env.MAP_DATA_NAME }}
+                mkdir retrieval/data && cd retrieval/data
+                gdown ${{ env.MAP_DATA_URL }} -O ${{ env.MAP_DATA_NAME }}
             - name: Build Emoji Map
               working-directory: ${{ env.PROJECT_VERSION }}
               run: |
