@@ -12,7 +12,7 @@ jobs:
         env:
             PYTHON_VERSION: "3.10.4"
             PROJECT_VERSION: "v0"
-            MAP_DATA_NAME: "emojis_unform.json"
+            MAP_DATA_NAME: "emojis_v0.json"
             MAP_DATA_URL: "https://drive.google.com/uc?id=18410XLDOgXxY5PHxn8IEIDytDgu81MB7"
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         steps:
@@ -31,7 +31,7 @@ jobs:
             - name: Build Emoji Map
               working-directory: ${{ env.PROJECT_VERSION }}
               run: |
-                python build_emoji_map.py
+                python build_emoji_map.py ${{ env.MAP_DATA_NAME }}
             - name: Commit and push updated emoji_map.html
               run: |
                 git config user.name "github-actions[bot]"

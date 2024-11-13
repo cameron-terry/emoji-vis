@@ -4,6 +4,7 @@ import random
 from retrieval.get_all_emojis import EmojiDict
 import preprocessing.tsne_exp as tsne
 import visual.basic_interactive as interactive
+import sys
 
 
 def build_coordinates(e_dict: EmojiDict, seed=42):
@@ -55,7 +56,7 @@ if __name__ == "__main__":
     SEED = 42
     SUBSET_SIZE = 1000
 
-    emoji_dict = EmojiDict(read=True, source="emojis_unform.json")
+    emoji_dict = EmojiDict(read=True, source=sys.argv[1])
     neutral_emoji_data = emoji_dict.emoji_remove_by_name_substr(
         emoji_dict.get_emoji_map(), "tone"
     )
