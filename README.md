@@ -4,6 +4,8 @@ What does it look like when you group similar emojis on a 2D graph
 ## v0
 in `v0`, run `source dev_setup.sh`. This installs a code linter [ruff](https://github.com/astral-sh/ruff) for pre-commit checks
 
+Place huggingface API token in `.env` file
+
 ### testing
 `coverage run -m pytest  -v -s && coverage report -m`
 for unit tests coverage must be above 0.9

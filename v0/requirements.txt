@@ -3,3 +3,8 @@ pytest
 ruff
 pre-commit
 coverage-badge
+python-dotenv
+huggingface-hub
+numpy
+tqdm
+ratelimiter
