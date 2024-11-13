@@ -2,16 +2,20 @@ from dotenv import load_dotenv
 from huggingface_hub import InferenceClient
 import os
 import numpy as np
+from ratelimiter import RateLimiter
 
 load_dotenv()
 
 
 class Embedder:
+    """Class to get embeddings from Hugging Face Inference API."""
+
     def __init__(self):
         self.hf_token = os.getenv("HF_INFERENCE_TOKEN")
         assert self.hf_token, "Please set the HF_INFERENCE_TOKEN environment variable"
         self.client = InferenceClient(token=self.hf_token)
 
+    @RateLimiter(max_calls=5, period=1)
     def get_embeddings(self, text: str, method: str = "mean") -> np.ndarray:
         emb = self.client.feature_extraction(text)
         fse = self.fixed_size_embeddings(emb, method)

@@ -8,62 +8,66 @@ SAMPLE_TEXTS = {
     "ratatouille": "Ratatouille is a famous animated movie.",
 }
 
+emb = get_embeddings.Embedder()
 
-def test_embedder_mean():
-    emb = get_embeddings.Embedder()
 
-    rat_emb = emb.get_embeddings(SAMPLE_TEXTS["rat"])
-    eiffel_tower_emb = emb.get_embeddings(SAMPLE_TEXTS["eiffel_tower"])
-    ratatouille_emb = emb.get_embeddings(SAMPLE_TEXTS["ratatouille"])
-
+def check_order(a, b, c):
     try:
         # (Ratatouille, Eiffel Tower) > (Rats, Ratatouille) > (Rats, Eiffel Tower)
-        assert emb.cosine_similarity(rat_emb, eiffel_tower_emb) < emb.cosine_similarity(
-            rat_emb, ratatouille_emb
-        )
-        assert emb.cosine_similarity(rat_emb, ratatouille_emb) < emb.cosine_similarity(
-            eiffel_tower_emb, ratatouille_emb
-        )
+        assert a > b
+        assert b > c
     except AssertionError:  # pragma: no cover
-        warnings.warn("Mean embedding output undesired logical outcome")
+        # get the highest cosine similarity
+        score_map = {
+            "(Ratatouille, Eiffel Tower)": float(a[0]),
+            "(Rats, Ratatouille)": float(b[0]),
+            "(Rats, Eiffel Tower)": float(c[0]),
+        }
+        score_map_sorted = dict(
+            sorted(score_map.items(), key=lambda item: item[1], reverse=True)
+        )
+
+        warning_message = "\n\nMean embedding output undesired logical outcome:\n"
+        for k, v in score_map_sorted.items():
+            warning_message += f"{k} : {v}\n"
+
+        warnings.warn(warning_message)
+
+
+def test_embedder_mean():
+    rat_emb = emb.get_embeddings(SAMPLE_TEXTS["rat"], method="mean")
+    eiffel_tower_emb = emb.get_embeddings(SAMPLE_TEXTS["eiffel_tower"], method="mean")
+    ratatouille_emb = emb.get_embeddings(SAMPLE_TEXTS["ratatouille"], method="mean")
+
+    a = emb.cosine_similarity(ratatouille_emb, eiffel_tower_emb)
+    b = emb.cosine_similarity(rat_emb, ratatouille_emb)
+    c = emb.cosine_similarity(rat_emb, eiffel_tower_emb)
+
+    check_order(a, b, c)
 
 
 def test_embedder_max():
-    emb = get_embeddings.Embedder()
-
     rat_emb = emb.get_embeddings(SAMPLE_TEXTS["rat"], method="max")
     eiffel_tower_emb = emb.get_embeddings(SAMPLE_TEXTS["eiffel_tower"], method="max")
     ratatouille_emb = emb.get_embeddings(SAMPLE_TEXTS["ratatouille"], method="max")
 
-    try:
-        # (Ratatouille, Eiffel Tower) > (Rats, Ratatouille) > (Rats, Eiffel Tower)
-        assert emb.cosine_similarity(rat_emb, eiffel_tower_emb) < emb.cosine_similarity(
-            rat_emb, ratatouille_emb
-        )
-        assert emb.cosine_similarity(rat_emb, ratatouille_emb) < emb.cosine_similarity(
-            eiffel_tower_emb, ratatouille_emb
-        )
-    except AssertionError:  # pragma: no cover
-        warnings.warn("Max embedding output undesired logical outcome")
+    a = emb.cosine_similarity(ratatouille_emb, eiffel_tower_emb)
+    b = emb.cosine_similarity(rat_emb, ratatouille_emb)
+    c = emb.cosine_similarity(rat_emb, eiffel_tower_emb)
+
+    check_order(a, b, c)
 
 
 def test_embedder_cls():
-    emb = get_embeddings.Embedder()
-
     rat_emb = emb.get_embeddings(SAMPLE_TEXTS["rat"], method="cls")
     eiffel_tower_emb = emb.get_embeddings(SAMPLE_TEXTS["eiffel_tower"], method="cls")
     ratatouille_emb = emb.get_embeddings(SAMPLE_TEXTS["ratatouille"], method="cls")
 
-    try:
-        # (Ratatouille, Eiffel Tower) > (Rats, Ratatouille) > (Rats, Eiffel Tower)
-        assert emb.cosine_similarity(rat_emb, eiffel_tower_emb) < emb.cosine_similarity(
-            rat_emb, ratatouille_emb
-        )
-        assert emb.cosine_similarity(rat_emb, ratatouille_emb) < emb.cosine_similarity(
-            eiffel_tower_emb, ratatouille_emb
-        )
-    except AssertionError:  # pragma: no cover
-        warnings.warn("CLS embedding output undesired logical outcome")
+    a = emb.cosine_similarity(ratatouille_emb, eiffel_tower_emb)
+    b = emb.cosine_similarity(rat_emb, ratatouille_emb)
+    c = emb.cosine_similarity(rat_emb, eiffel_tower_emb)
+
+    check_order(a, b, c)
 
 
 def test_embedder_bad_embedding_input():
