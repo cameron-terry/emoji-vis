@@ -1,8 +1,9 @@
 import emoji
 import json
-from typing import List, Dict
+from typing import List, Dict, Tuple, Callable, Any
 import numpy as np
 import os
+import re
 
 EmojiData = Dict[str, np.ndarray]
 
@@ -49,6 +50,14 @@ class EmojiDict:
             for emoji in self.all_emojis
         }
 
+    def chain_filter(
+        self, emoji_map: Dict[str, EmojiData], filters: List[Tuple[Callable, Any]]
+    ):
+        """Chain multiple filter functions to apply sequentially on the emoji map."""
+        for func, *args in filters:
+            emoji_map = func(emoji_map, *args)
+        return emoji_map
+
     def emoji_filter_by_status(self, emoji_map: Dict[str, EmojiData], status: str):
         if status not in emoji.STATUS:
             raise ValueError(f"Status must be one of {list(emoji.STATUS.keys())}")
@@ -67,6 +76,22 @@ class EmojiDict:
     def emoji_remove_by_name_substr(self, emoji_map: Dict[str, EmojiData], substr: str):
         """Remove emojis by substring in their name."""
         return {e: name for e, name in emoji_map.items() if substr not in name["name"]}
+
+    def emoji_remove_by_name_regex(self, emoji_map: Dict[str, EmojiData], regex: str):
+        """Remove emojis by regex in their name."""
+        return {
+            e: name
+            for e, name in emoji_map.items()
+            if not re.match(regex, name["name"], re.IGNORECASE)
+        }
+
+    def emoji_remove_by_emoji_regex(self, emoji_map: Dict[str, EmojiData], regex: str):
+        """Remove emojis by regex in their name."""
+        return {
+            e: name
+            for e, name in emoji_map.items()
+            if not re.match(regex, e, re.IGNORECASE)
+        }
 
     def all_emojis_with_data(
         self,

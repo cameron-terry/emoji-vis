@@ -1,0 +1,7 @@
+emoji
+numpy
+scikit-learn
+plotly
+pandas
+gdown
+kaleido

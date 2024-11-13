@@ -12,9 +12,10 @@ jobs:
         env:
             PYTHON_VERSION: "3.10.4"
             PROJECT_VERSION: "v0"
-            MAP_DATA_NAME: "emojis_unform.json"
+            MAP_DATA_NAME: "emojis_v0.json"
             MAP_DATA_URL: "https://drive.google.com/uc?id=18410XLDOgXxY5PHxn8IEIDytDgu81MB7"
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            REQUIREMENTS_FILE: "requirements_build.txt"
         steps:
             - uses: actions/checkout@v4
             - name: Set up Python ${{ env.PYTHON_VERSION }}
@@ -25,14 +26,14 @@ jobs:
               working-directory: ${{ env.PROJECT_VERSION }}
               run: |
                 python -m pip install --upgrade pip
-                if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+                if [ -f ${{ env.REQUIREMENTS_FILE }} ]; then pip install -r ${{ env.REQUIREMENTS_FILE }}; fi
                 mkdir retrieval/data && cd retrieval/data
                 gdown ${{ env.MAP_DATA_URL }} -O ${{ env.MAP_DATA_NAME }}
             - name: Build Emoji Map
               working-directory: ${{ env.PROJECT_VERSION }}
               run: |
-                python build_emoji_map.py
-            - name: Commit and push updated emoji_map.html
+                python build_emoji_map.py ${{ env.MAP_DATA_NAME }}
+            - name: Commit and push updated generated files
               run: |
                 git config user.name "github-actions[bot]"
                 git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -41,9 +42,10 @@ jobs:
                 git fetch origin ${{ github.event.pull_request.head.ref }}
                 git checkout ${{ github.event.pull_request.head.ref }}
 
-                # Add the HTML file and commit
+                # Update the changed files
                 git add emoji_map.html
-                git commit -m "Update emoji_map.html"
+                git add ${{env.PROJECT_VERSION}}/screenshots/1000_random.png
+                git commit -m "Automatically updated generated files"
 
                 # Pull the latest changes and rebase
                 git pull --rebase origin ${{ github.event.pull_request.head.ref }}
