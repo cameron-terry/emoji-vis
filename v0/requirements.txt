@@ -8,3 +8,6 @@ huggingface-hub
 numpy
 tqdm
 ratelimiter
+scikit-learn
+plotly
+pandas

@@ -181,3 +181,7 @@ cython_debug/
 
 # Linter
 .ruff_cache
+
+# emoji-coordinates
+emoji_coordinates_*.json
+screenshots/1000_random_*.png

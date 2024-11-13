@@ -10,12 +10,16 @@ EmojiData = Dict[str, np.ndarray]
 class EmojiDict:
     """Dataset of emojis with their names."""
 
-    def __init__(self, load_all_emojis: bool = True):
+    def __init__(self, read: bool = False, source=None):
         self.all_emojis = self.get_all_emojis()
         self.data = {}
 
-        if load_all_emojis:
-            self.data = self.all_emojis_with_data("w")
+        if read:
+            self.data = self.all_emojis_with_data("r", source=source)
+
+    def set_data(self, data: Dict[str, EmojiData]):
+        self.data = data
+        self.all_emojis = list(data.keys())
 
     def data_given(self, given_emoji: str):
         """
@@ -56,8 +60,20 @@ class EmojiDict:
             if self.data_given(e)["status"] == emoji.STATUS[status]
         }
 
+    def emoji_filter_by_name_substr(self, emoji_map: Dict[str, EmojiData], substr: str):
+        """Filter emojis by substring in their name."""
+        return {e: name for e, name in emoji_map.items() if substr in name["name"]}
+
+    def emoji_remove_by_name_substr(self, emoji_map: Dict[str, EmojiData], substr: str):
+        """Remove emojis by substring in their name."""
+        return {e: name for e, name in emoji_map.items() if substr not in name["name"]}
+
     def all_emojis_with_data(
-        self, mode: str = "w", filters: List[str] = None, raw: bool = False
+        self,
+        mode: str = "w",
+        filters: List[str] = None,
+        raw: bool = False,
+        source: str = None,
     ) -> Dict[str, EmojiData]:
         if mode not in ["r", "w"]:
             raise ValueError("Mode must be 'r' (read) or 'w' (write)")
@@ -69,7 +85,7 @@ class EmojiDict:
         script_dir = os.path.dirname(os.path.realpath(__file__))
 
         # Construct the path to emojis.json relative to get_all_emojis.py
-        json_path = os.path.join(script_dir, "data", "emojis.json")
+        json_path = os.path.join(script_dir, "data", source or "emojis.json")
 
         if raw:
             with open(json_path, "w") as f:
@@ -94,7 +110,7 @@ class EmojiDict:
 
 
 if __name__ == "__main__":  # pragma: no cover
-    emoji_dict = EmojiDict(load_all_emojis=False)
-    emoji_map = emoji_dict.all_emojis_with_data("w")
-    for e, d in emoji_map.items():
+    emoji_dict = EmojiDict()
+    emoji_dict.all_emojis_with_data("w")
+    for e, d in emoji_dict.data.items():
         print(f"{e} : {d['name']}")

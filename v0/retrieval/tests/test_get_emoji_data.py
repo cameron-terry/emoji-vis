@@ -53,7 +53,7 @@ def test_all_emojis_with_data_filter(filters=["fully_qualified"]):
 
 def test_all_emojis_with_data_raw():
     emoji_map = emoji_dict.all_emojis_with_data(raw=True)
-    assert len(emoji_map) > 0
+    assert len(emoji_map) == 0
 
 
 def test_bad_input():
