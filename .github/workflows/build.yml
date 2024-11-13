@@ -33,7 +33,7 @@ jobs:
               working-directory: ${{ env.PROJECT_VERSION }}
               run: |
                 python build_emoji_map.py ${{ env.MAP_DATA_NAME }}
-            - name: Commit and push updated emoji_map.html
+            - name: Commit and push updated generated files
               run: |
                 git config user.name "github-actions[bot]"
                 git config user.email "github-actions[bot]@users.noreply.github.com"
