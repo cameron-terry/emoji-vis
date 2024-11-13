@@ -1,5 +1,6 @@
 emoji
 pytest
 coverage-badge
+python-dotenv
 huggingface-hub
 numpy
