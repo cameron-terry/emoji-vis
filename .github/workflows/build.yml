@@ -37,11 +37,16 @@ jobs:
                 git config user.name "github-actions[bot]"
                 git config user.email "github-actions[bot]@users.noreply.github.com"
 
-                # Add the HTML file to the Git staging area
-                git add emoji_map.html
+                # Fetch and check out the pull request branch
+                git fetch origin ${{ github.event.pull_request.head.ref }}
+                git checkout ${{ github.event.pull_request.head.ref }}
 
-                # Commit the changes with a message
+                # Add the HTML file and commit
+                git add emoji_map.html
                 git commit -m "Update emoji_map.html"
 
-                # Push the changes to the branch associated with the pull request
+                # Pull the latest changes and rebase
+                git pull --rebase origin ${{ github.event.pull_request.head.ref }}
+
+                # Push the updated commit to the pull request branch
                 git push origin HEAD:${{ github.event.pull_request.head.ref }}
