@@ -11,7 +11,7 @@ SAMPLE_TEXTS = {
 emb = get_embeddings.Embedder()
 
 
-def check_order(a, b, c):
+def check_order(a, b, c, method):
     try:
         # (Ratatouille, Eiffel Tower) > (Rats, Ratatouille) > (Rats, Eiffel Tower)
         assert a > b
@@ -27,7 +27,7 @@ def check_order(a, b, c):
             sorted(score_map.items(), key=lambda item: item[1], reverse=True)
         )
 
-        warning_message = "\n\nMean embedding output undesired logical outcome:\n"
+        warning_message = f"\n\n{method} embedding output undesired logical outcome:\n"
         for k, v in score_map_sorted.items():
             warning_message += f"{k} : {v}\n"
 
@@ -43,7 +43,7 @@ def test_embedder_mean():
     b = emb.cosine_similarity(rat_emb, ratatouille_emb)
     c = emb.cosine_similarity(rat_emb, eiffel_tower_emb)
 
-    check_order(a, b, c)
+    check_order(a, b, c, method="mean")
 
 
 def test_embedder_max():
@@ -55,7 +55,7 @@ def test_embedder_max():
     b = emb.cosine_similarity(rat_emb, ratatouille_emb)
     c = emb.cosine_similarity(rat_emb, eiffel_tower_emb)
 
-    check_order(a, b, c)
+    check_order(a, b, c, method="max")
 
 
 def test_embedder_cls():
@@ -67,7 +67,7 @@ def test_embedder_cls():
     b = emb.cosine_similarity(rat_emb, ratatouille_emb)
     c = emb.cosine_similarity(rat_emb, eiffel_tower_emb)
 
-    check_order(a, b, c)
+    check_order(a, b, c, method="cls")
 
 
 def test_embedder_bad_embedding_input():
