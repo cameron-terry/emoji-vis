@@ -11,6 +11,7 @@ jobs:
         runs-on: ubuntu-latest
         env:
             PYTHON_VERSION: "3.10.4"
+            NODE_VERSION: "14"
             PROJECT_VERSION: "v0"
             MAP_DATA_NAME: "emojis_v0.json"
             MAP_DATA_URL: "https://drive.google.com/uc?id=18410XLDOgXxY5PHxn8IEIDytDgu81MB7"
@@ -22,6 +23,10 @@ jobs:
               uses: actions/setup-python@v5
               with:
                 python-version: ${{ env.PYTHON_VERSION }}
+            - name: Set up Node (for js-beautify)
+              uses: actions/setup-node@v2
+              with:
+                node-version: ${{ env.NODE_VERSION }}
             - name: Install dependencies & Retrieve data
               working-directory: ${{ env.PROJECT_VERSION }}
               run: |
@@ -33,6 +38,10 @@ jobs:
               working-directory: ${{ env.PROJECT_VERSION }}
               run: |
                 python build_emoji_map.py ${{ env.MAP_DATA_NAME }}
+            - name: Format HTML
+              run: |
+                npm install -g js-beautify
+                js-beautify --type html -r -s 1 -m 0 *.html
             - name: Commit and push updated generated files
               run: |
                 git config user.name "github-actions[bot]"
