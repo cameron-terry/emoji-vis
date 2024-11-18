@@ -28,13 +28,19 @@ def find_optimal_pca_components(embeddings, variance_threshold=0.95, show_plot=F
     return optimal_components
 
 
-def fit(embeddings, random_state=42):
-    optimal_components = find_optimal_pca_components(embeddings)
-
+def pca_fit(embeddings, optimal_components, random_state=42):
     pca = PCA(n_components=optimal_components, random_state=random_state)
-    tsne = TSNE(n_components=2, random_state=random_state, perplexity=30, max_iter=1000)
-
     embeddings_reduced = pca.fit_transform(embeddings)
-    embeddings_2d = tsne.fit_transform(embeddings_reduced)
+    return embeddings_reduced
+
+
+def fit(embeddings, random_state=42, params={"pca": True}):
+    if params["pca"]:
+        print("Finding optimal number of PCA components...")
+        optimal_components = find_optimal_pca_components(embeddings)
+        embeddings = pca_fit(embeddings, optimal_components)
+
+    tsne = TSNE(n_components=2, random_state=random_state, perplexity=30, max_iter=1000)
+    embeddings_2d = tsne.fit_transform(embeddings)
 
     return embeddings_2d

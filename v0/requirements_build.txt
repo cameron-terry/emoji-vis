@@ -1,6 +1,7 @@
 emoji
 numpy
 scikit-learn
+umap-learn
 plotly
 pandas
 gdown

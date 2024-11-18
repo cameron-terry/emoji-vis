@@ -25,14 +25,21 @@ def save_subset_json(emoji_data, filename="emojis_subset_v0"):
         json.dump(emoji_data_no_embeddings, f, indent=4)
 
 
-def build_coordinates(e_dict: EmojiDict, seed=42):
+def build_coordinates(
+    e_dict: EmojiDict, seed=42, settings={"method": tsne, "params": {"pca": True}}
+):
+    """
+    Build 2D coordinates for emojis using t-SNE or UMAP.
+    Provide the settings for the method and its parameters.
+    The methods are defined in the preprocessing folder.
+    """
     random.seed(seed)
 
     embeddings = []
     emojis = []
     dict_emojis = e_dict.all_emojis
     print(
-        f"number of emojis: {len(dict_emojis)}, coverage: {len(dict_emojis) / MAX_EMOJIS * 100:.2f}%"
+        f"number of emojis: {SUBSET_SIZE}, coverage: {SUBSET_SIZE / len(dict_emojis) * 100:.2f}%"
     )
 
     # Select a random subset of emojis
@@ -53,7 +60,7 @@ def build_coordinates(e_dict: EmojiDict, seed=42):
     emoji_coordinates = {}
 
     # Perform t-SNE
-    embeddings_2d = tsne.fit(embeddings)
+    embeddings_2d = settings["method"].fit(embeddings, params=settings["params"])
 
     for idx, emoji in enumerate(emojis):
         x, y = embeddings_2d[idx]
@@ -79,11 +86,16 @@ if __name__ == "__main__":
                 r"[\U0001F1E6-\U0001F1FF]{2}",
             ),  # flags
             (emoji_dict.emoji_remove_by_name_substr, "_o\u2019clock"),  # some clocks
+            (emoji_dict.emoji_remove_by_name_substr, "man"),
+            (emoji_dict.emoji_remove_by_name_substr, "woman"),
+            (emoji_dict.emoji_filter_by_status, "fully_qualified"),
         ],
     )
 
     MAX_EMOJIS = len(emoji_dict.all_emojis)
     emoji_dict.set_data(filtered_data)
-    interactive.plot_embeddings(*build_coordinates(emoji_dict, seed=SEED), (1600, 1200))
+    interactive.plot_embeddings(
+        *build_coordinates(emoji_dict, seed=SEED), dimensions=(1600, 1200)
+    )
 
     save_subset_json(filtered_data)
