@@ -11,7 +11,7 @@ jobs:
         runs-on: ubuntu-latest
         env:
             PYTHON_VERSION: "3.10.4"
-            NODE_VERSION: "14"
+            NODE_VERSION: "20"
             PROJECT_VERSION: "v0"
             MAP_DATA_NAME: "emojis_v0.json"
             MAP_DATA_URL: "https://drive.google.com/uc?id=18410XLDOgXxY5PHxn8IEIDytDgu81MB7"
